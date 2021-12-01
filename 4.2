@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <malloc.h>
+#include <string.h>
+
+
+struct students {
+  char PIB[100];
+  char date[8];
+  char place[100];
+};
+
+struct students add();
+void outputTable(struct students *arr, int size);
+int gdays(const char* date);
+int cmp_date(const void* a, const void* b);
+
+int main(void){
+  int size;
+
+  printf("Enter size of table: ");
+  scanf("%d", &size);
+  
+  struct students arr[size];
+
+  for(int i = 0; i < size; i++){
+    arr[i] = add();
+  }
+
+  qsort((void*)arr, sizeof(arr)/sizeof(struct students), sizeof(struct students), &cmp_date);
+
+  outputTable(arr, size);
+}
+
+struct students add(){
+  struct students e;
+
+  system("clear");
+
+  printf("Enter PIB: ");
+  scanf("%s", e.PIB);
+  
+  printf("Enter date of Birth: ");
+  scanf("%s", e.date);
+
+  printf("Enter place of Birth: ");
+  scanf("%s", e.place);
+
+  return e;
+}
+
+void outputTable(struct students *arr, int size) {
+
+  system("clear");
+
+  puts("Students");
+  printf("PIB\tDate of birth\tPlace of birth\n");
+
+  for(int i = 0; i < size; i++){
+    printf("%s\t%s\t%s  \n", arr[i].PIB, arr[i].date, arr[i].place);
+  }
+}
+
+int cmp_date(const void* a, const void* b) {
+   struct students* pa = (struct students*) a;
+   struct students* pb = (struct students*) b;
+   return (gdays(pa->date) < gdays(pb->date)) ? 1 : -1;
+}
+
+int gdays(const char* date) {
+    int year = 0, mon = 0, day = 0;
+    if(sscanf(date, "%2d.%2d.%2d", &day, &mon, &year) == 3)
+         return year*365 + mon*30 + year;
+    return 0;
+}
