@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <malloc.h>
+
+
+struct agriculturalEnterprises {
+  char name[100];
+  char typeOFproperty;
+  double area;
+  int Workers;
+};
+
+struct agriculturalEnterprises add();
+struct agriculturalEnterprises sort(struct agriculturalEnterprises *arr, int size);
+int structCmpByName(const void *a, const void *b);
+void outputTable(struct agriculturalEnterprises *arr, int size, char comment[]);
+
+int main(void){
+  int size;
+
+  char comment[100];
+  printf("Enter comment of table: ");
+  fgets(comment, 100, stdin);
+
+  printf("Enter size of table: ");
+  scanf("%d", &size);
+  
+
+  struct agriculturalEnterprises arr[size];
+
+  for(int i = 0; i < size; i++){
+    arr[i] = add();
+  }
+
+  sort(arr, size);
+
+  outputTable(arr, size, comment);
+}
+
+struct agriculturalEnterprises add(){
+  struct agriculturalEnterprises e;
+
+  system("clear");
+
+  printf("Enter name: ");
+  scanf(" %s", e.name);
+  
+  printf("Enter type of property: ");
+  scanf(" %s", &e.typeOFproperty);
+
+  printf("Enter area: ");
+  scanf("%lf",&e.area);
+
+  printf("Enter count of workers: ");
+  scanf("%d",&e.Workers);
+
+  return e;
+}
+
+struct agriculturalEnterprises sort(struct agriculturalEnterprises *arr, int size) 
+{ 
+  qsort(arr, size, sizeof(struct agriculturalEnterprises), structCmpByName);
+  return *arr;    
+} 
+
+int structCmpByName(const void *a, const void *b) 
+{ 
+    struct agriculturalEnterprises *ia = (struct agriculturalEnterprises *)a;
+    struct agriculturalEnterprises *ib = (struct agriculturalEnterprises *)b;
+    return strcmp(ia->name, ib->name);
+} 
+
+void outputTable(struct agriculturalEnterprises *arr, int size, char comment[]) {
+
+  system("clear");
+
+  puts("Agricultural Enterprises");
+  printf("Name\tType of property\tArea\tAmount of workers\n");
+
+  for(int i = 0; i < size; i++){
+    printf("%s\t%c\t%lf\t%d\n", arr[i].name, arr[i].typeOFproperty, arr[i].area, arr[i].Workers);
+  }
+
+  puts(comment);
+}
